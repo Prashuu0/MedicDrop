@@ -8,13 +8,107 @@
     "server": "cd backend && npm run dev",
     "client": "cd frontend && npm start",
     "build": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build",
+    "build:all": "npm run build:backend && npm run build",
     "install-deps": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "start": "cd backend && npm start"
+    "start": "cd backend && npm start",
+    "start:prod": "cd backend && npm run start:prod",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd backend && npm test",
+    "test:frontend": "cd frontend && npm test",
+    "test:watch": "concurrently \"npm run test:backend -- --watch\" \"npm run test:frontend -- --watch\"",
+    "test:coverage": "npm run test:backend -- --coverage && npm run test:frontend -- --coverage",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:fix": "npm run lint:backend -- --fix && npm run lint:frontend -- --fix",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "setup": "chmod +x setup.sh && ./setup.sh",
+    "db:seed": "cd backend && npm run db:seed",
+    "db:reset": "cd backend && npm run db:reset",
+    "db:migrate": "cd backend && npm run db:migrate",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "deploy:staging": "npm run build:all && npm run deploy:staging:backend && npm run deploy:staging:frontend",
+    "deploy:staging:backend": "cd backend && npm run deploy:staging",
+    "deploy:staging:frontend": "cd frontend && npm run deploy:staging",
+    "deploy:prod": "npm run build:all && npm run deploy:prod:backend && npm run deploy:prod:frontend",
+    "deploy:prod:backend": "cd backend && npm run deploy:prod",
+    "deploy:prod:frontend": "cd frontend && npm run deploy:prod",
+    "clean": "rm -rf node_modules backend/node_modules frontend/node_modules",
+    "clean:install": "npm run clean && npm run install-deps",
+    "health": "curl -f http://localhost:5000/health || exit 1",
+    "logs": "tail -f backend/logs/*.log",
+    "docs": "npm run docs:api && npm run docs:frontend",
+    "docs:api": "cd backend && npm run docs",
+    "docs:frontend": "cd frontend && npm run docs",
+    "precommit": "npm run lint && npm run test",
+    "prepush": "npm run build && npm run test:coverage"
   },
-  "keywords": ["healthcare", "medicine", "delivery", "mern", "react", "nodejs"],
-  "author": "MedicDrop Team",
+  "keywords": [
+    "healthcare",
+    "medicine",
+    "delivery",
+    "mern",
+    "react",
+    "nodejs",
+    "typescript",
+    "mongodb",
+    "ai",
+    "ocr",
+    "prescription",
+    "pharmacy",
+    "doctor",
+    "patient",
+    "delivery",
+    "admin",
+    "india",
+    "rural",
+    "urban",
+    "health",
+    "medical",
+    "platform"
+  ],
+  "author": {
+    "name": "Prashant Thakur",
+    "email": "thakurprashant881@gmail.com",
+    "url": "https://github.com/prashuu0"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Prashuu0/MedicDrop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Prashuu0/MedicDrop/issues"
+  },
+  "homepage": "https://github.com/Prashuu0/MedicDrop#readme",
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "prettier": "^3.0.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run precommit"
+    }
   }
 }
